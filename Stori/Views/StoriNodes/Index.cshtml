@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Stori.Data.StoriNode>
+
+@{
+	ViewData["Title"] = "Your Stories";
+}
+
+<div class="col">
+	@for (var i = 0; i < Model.Count(); ++i)
+	{
+		var node = Model.ElementAt(i);
+		<div class="card card-action">
+			<div class="card-body row">
+				<div class="col">
+					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+				</div>
+				<div class="col-auto choice-votes dark-text">
+					<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body row">
+				<div class="col">
+					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
+				</div>
+				<div class="col-auto choice-votes dark-text">
+					<div class="row">
+						<a asp-action="Edit" asp-route-id="@node.ID"><i class="far fa-edit choice-votes-icon"></i> Edit</a>
+					</div>
+					<div class="row">
+						<a asp-action="Delete" asp-route-id="@node.ID"><i class="far fa-trash-alt choice-votes-icon"></i>Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		if (i < Model.Count() - 1)
+		{
+			<div class="card-seperator text-center">
+				<i class="fas fa-ellipsis-v"></i>
+			</div>
+		}
+	}
+</div>

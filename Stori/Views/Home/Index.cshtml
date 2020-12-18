@@ -1,0 +1,94 @@
+﻿@model Stori.Data.StoriNode
+
+@{
+	ViewData["Title"] = "Home Page";
+	IEnumerable<Stori.Data.StoriNode> history = ViewData["history"] as IEnumerable<Stori.Data.StoriNode>;
+	IEnumerable<Stori.Data.StoriNode> next = ViewData["next"] as IEnumerable<Stori.Data.StoriNode>;
+}
+
+<script>
+	function OnChoiceSelect(choice)
+	{
+		console.log(choice)
+		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=" + choice;
+		window.location.reload(false)
+	}
+
+	function BeginAgain()
+	{
+		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=; Max-Age=-99999999;";
+		window.location.reload(false)
+	}
+
+	$(document).ready(function () {
+		console.log("OnReady");
+		window.scrollTo(0, document.body.scrollHeight);
+	});
+</script>
+
+<div class="col">
+	@{
+		for (var i = 0; i < history.Count(); ++i)
+		{
+			var node = history.ElementAt(i);
+			if (!string.IsNullOrEmpty(node.Action))
+			{
+				<div class="card card-action">
+					<div class="card-body row">
+						<div class="col">
+							<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+						</div>
+						<div class="col-auto choice-votes">
+							<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+						</div>
+					</div>
+
+				</div>
+			}
+			<div class="card">
+				<div class="card-body">
+					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
+				</div>
+			</div>
+			<div class="card-seperator text-center">
+				<i class="fas fa-ellipsis-v"></i>
+			</div>
+		}
+	}
+
+	<div class="card">
+		<div class="card-body">
+			@{
+				if (!next.Any())
+				{
+					<div class="alert alert-dark card-prompt" role="alert">
+						You've reached the end of the story so far. What happens next?
+					</div>
+				}
+				else
+			}
+			<div class="list-group">
+				@foreach (Stori.Data.StoriNode node in next)
+				{
+					<button onclick="OnChoiceSelect('@node.ID')" class="list-group-item d-flex justify-content-between align-items-center card-action">
+						@node.Action
+						<div class="col-auto choice-votes">
+							<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+						</div>
+					</button>
+				}
+				<a href="@Stori.Controllers.StoriNodesController.ROUTE/create?parent=@Model.ID" class="btn btn-choice btn-block">
+					Create New Choice <i class="fas fa-plus-square"></i>
+				</a>
+				@{
+					if (Model.ID != default)
+					{
+						<button onclick="BeginAgain()" class="btn btn-choice btn-block">
+							Begin Again <i class="fas fa-undo-alt"></i>
+						</button>
+					}
+				}
+			</div>
+		</div>
+	</div>
+</div>

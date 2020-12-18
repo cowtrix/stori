@@ -1,0 +1,56 @@
+﻿@model Stori.Data.StoriNode
+
+@{
+	ViewData["Title"] = "Edit";
+	var parent = (Stori.Data.StoriNode)ViewData["parent"];
+}
+
+<h1>Edit</h1>
+
+<h4>StoriNode</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="ID" />
+			<input type="hidden" asp-for="Parent" />
+			<div class="card">
+				<div class="card-body">
+					<h4>@parent.Content</h4>
+				</div>
+			</div>
+			<div class="form-group">
+				<label asp-for="CreationDate" class="control-label"></label>
+				<input readonly asp-for="CreationDate" class="form-control" />
+				<span asp-validation-for="CreationDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Votes" class="control-label"></label>
+				<input readonly asp-for="Votes" class="form-control" />
+				<span asp-validation-for="Votes" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Action" class="control-label"></label>
+				<input asp-for="Action" class="form-control" />
+				<span asp-validation-for="Action" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Content" class="control-label"></label>
+				<input asp-for="Content" class="form-control" />
+				<span asp-validation-for="Content" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

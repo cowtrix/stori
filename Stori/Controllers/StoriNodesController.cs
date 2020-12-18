@@ -30,24 +30,6 @@ namespace Stori.Controllers
             return View(enumerable.Where(n => n.Creator == userGuid).ToList());
         }
 
-        [HttpGet("details/{id}")]
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var storiNode = await m_context.StoriNode
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (storiNode == null)
-            {
-                return NotFound();
-            }
-
-            return View(storiNode);
-        }
-
         [HttpGet("create")]
         public IActionResult Create([FromQuery]Guid? parent)
         {
@@ -56,10 +38,11 @@ namespace Stori.Controllers
                 return BadRequest("Parent cannot be null");
 			}
             var parentNode = m_context.StoriNode.Find(parent.Value);
-            if(parentNode == null)
+            if(parentNode == null && parent.Value != default)
 			{
-                return NotFound();
+                return BadRequest($"Couldn't find parent with ID {parent.Value}");
 			}
+            parentNode = parentNode ?? StoriApp.DefaultNode;
             ViewData["parent"] = parentNode;
             var newNode = new StoriNode
             {
@@ -86,85 +69,6 @@ namespace Stori.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(storiNode);
-        }
-
-        [HttpGet("edit/{id}")]
-        public async Task<IActionResult> Edit([FromRoute]Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var storiNode = await m_context.StoriNode.FindAsync(id);
-            if (storiNode == null)
-            {
-                return NotFound();
-            }
-            var parentNode = m_context.StoriNode.Find(storiNode.Parent) ?? StoriApp.DefaultNode;
-            ViewData["parent"] = parentNode;
-            return View(storiNode);
-        }
-
-        [HttpPost("edit/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [Bind("ID,Action,Content,Votes")] StoriNode storiNode)
-        {
-            if (id != storiNode.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    m_context.Update(storiNode);
-                    await m_context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StoriNodeExists(storiNode.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(storiNode);
-        }
-
-        [HttpGet("delete/{id}")]
-        public async Task<IActionResult> Delete([FromRoute]Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var storiNode = await m_context.StoriNode
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (storiNode == null)
-            {
-                return NotFound();
-            }
-
-            return View(storiNode);
-        }
-
-        // POST: StoriNodes/Delete/5
-        [HttpPost("delete/{id}"), ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var storiNode = await m_context.StoriNode.FindAsync(id);
-            m_context.StoriNode.Remove(storiNode);
-            await m_context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool StoriNodeExists(Guid id)

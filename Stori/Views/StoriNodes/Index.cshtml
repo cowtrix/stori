@@ -5,6 +5,15 @@
 }
 
 <div class="col">
+
+	@if (!Model.Any())
+	{
+		<div class="alert alert-dark card-prompt" role="alert">
+			You haven't written any story choices yet. Start from the beginning, and write your adventure!
+		</div>
+		<a href="~/" class="btn btn-primary btn-block" role="button" aria-disabled="true">Go To Story</a>
+	}
+
 	@for (var i = 0; i < Model.Count(); ++i)
 	{
 		var node = Model.ElementAt(i);

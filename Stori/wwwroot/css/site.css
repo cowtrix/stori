@@ -2,112 +2,124 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+	white-space: normal;
+	text-align: center;
+	word-break: break-all;
 }
 
 a {
-    color: #F2EBBF;
+	color: #F2EBBF;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+	color: #fff;
+	background-color: #1b6ec2;
+	border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+	color: #fff;
+	background-color: #1b6ec2;
+	border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+	font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+	html {
+		font-size: 16px;
+	}
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+	font-size: 1rem;
+	line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 
 body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-    background-color: #251e20;
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	background-color: #251e20;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	white-space: nowrap;
+	line-height: 60px; /* Vertically center the text there */
 }
 
 .dark-skin {
-    background-color: #251e20;
-    color: white;
+	background-color: #251e20;
+	color: white;
 }
 
 .choice-votes {
+	margin-bottom:10px;
 }
 
-.choice-votes-icon {
-    padding-right:10px;
-    min-width:24px;
+.padded-icon {
+	padding-right: 10px;
+	margin-bottom: auto;
+	min-width: 24px;
 }
 
 .card {
-    background-color: #5C4B51;
-    color: white;
+	background-color: #5C4B51;
+	color: white;
 }
 
 .card-action {
-    min-height: 64px;
-    background-color: #f8d3a1;
-    color:black;
+	min-height: 64px;
+	background-color: #f8d3a1;
+	color: black;
+}
+
+.navbar-leftpad {
+	padding-left:20px;
 }
 
 .card-prompt {
-    background-color: #4d3f44;
-    color: white;
+	background-color: #4d3f44;
+	color: white;
 }
 
 .navbar-dark {
-    background-color: #5C4B51 !important;
+	background-color: #5C4B51 !important;
 }
 
 .btn-choice {
-    background-color: #F3B562;
+	background-color: #F3B562;
 }
 
 .dark-text {
-    color:black;
+	color: black;
+}
+
+.nav-link {
+	max-height: 35px;
 }

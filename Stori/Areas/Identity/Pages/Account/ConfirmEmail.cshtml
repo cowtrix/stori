@@ -1,0 +1,14 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Email Confirmed";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>@Model.StatusMessage</p>
+
+@if(!User.Identity.IsAuthenticated)
+{
+    <button asp-area="Identity" asp-page="/Account/Login">Login</button>
+}

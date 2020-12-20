@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Configuration;
 using Stori.Data;
 
 namespace Stori
@@ -20,7 +22,8 @@ namespace Stori
 
 		public static void Main(string[] args)
 		{
-			CreateHostBuilder(args).Build().Run();
+			CreateHostBuilder(args)
+				 .Build().Run();
 		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -28,6 +31,9 @@ namespace Stori
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();
+#if !DEBUG
+					webBuilder.UseUrls($"http://*:8081", $"http://*:8080");
+#endif
 				});
 	}
 }

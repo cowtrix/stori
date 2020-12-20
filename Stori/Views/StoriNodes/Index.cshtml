@@ -2,6 +2,7 @@
 
 @{
 	ViewData["Title"] = "Your Stories";
+	Stori.Controllers.StoriCustomController controller = ViewData["controller"] as Stori.Controllers.StoriCustomController;
 }
 
 <div class="col">
@@ -22,8 +23,13 @@
 				<div class="col">
 					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
 				</div>
-				<div class="col-auto choice-votes dark-text">
-					<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+				<div class="col-auto">
+					<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
+						<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
+					</div>
+					<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
+						<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -31,14 +37,6 @@
 			<div class="card-body row">
 				<div class="col">
 					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
-				</div>
-				<div class="col-auto choice-votes dark-text">
-					<div class="row">
-						<a asp-action="Edit" asp-route-id="@node.ID"><i class="far fa-edit choice-votes-icon"></i> Edit</a>
-					</div>
-					<div class="row">
-						<a asp-action="Delete" asp-route-id="@node.ID"><i class="far fa-trash-alt choice-votes-icon"></i>Delete</a>
-					</div>
 				</div>
 			</div>
 		</div>

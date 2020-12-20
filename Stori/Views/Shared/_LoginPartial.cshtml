@@ -7,18 +7,27 @@
 	{
 		<li class="nav-item">
 			<a class="nav-link text-light" href="~/r/" title="Your Stories" data-toggle="tooltip" data-placement="bottom">
-				<i class="fas fa-book"></i>
+				<div class="row navbar-leftpad">
+					<i class="fas fa-pen-nib padded-icon"></i>
+					<p class="d-sm-none">Your Stories</p>
+				</div>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="User Account" data-toggle="tooltip" data-placement="bottom">
-				<i class="fas fa-user"></i>
+				<div class="row navbar-leftpad">
+					<i class="fas fa-user padded-icon"></i>
+					<div class="d-sm-none">User Account</div>
+				</div>
 			</a>
 		</li>
 		<li class="nav-item">
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
 				<button type="submit" class="nav-link btn btn-link text-light" data-toggle="tooltip" data-placement="bottom" title="Logout">
-					<i class="fas fa-sign-out-alt"></i>
+					<div class="row navbar-leftpad">
+						<i class="fas fa-sign-out-alt padded-icon"></i>
+						<div class="d-sm-none">Logout</div>
+					</div>
 				</button>
 			</form>
 		</li>

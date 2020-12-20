@@ -12,6 +12,9 @@ using Stori.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Stori
 {
@@ -22,11 +25,16 @@ namespace Stori
 			Configuration = configuration;
 		}
 
-		public IConfiguration Configuration { get; }
+		public static IConfiguration Configuration { get; private set; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddLogging(config =>
+			{
+				config.AddConsole();
+				config.AddFile(Path.Combine("Logs", "stori-{Date}.log"));
+			});
 			services.AddRouting(options => options.LowercaseUrls = true);
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
@@ -35,6 +43,8 @@ namespace Stori
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
 			services.AddRazorPages();
+			services.AddTransient<IEmailSender, EmailSender>();
+			services.Configure<AuthMessageSenderOptions>(Configuration);	
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

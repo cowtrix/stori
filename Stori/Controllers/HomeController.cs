@@ -4,23 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Stori.Data;
 using Stori.Models;
 
 namespace Stori.Controllers
 {
-	public class HomeController : Controller
+	public class HomeController : StoriCustomController
 	{
+		public const string VOTE_COOKIE_KEY = "Stori_VoteToken";
 		public const string NODE_COOKIE_KEY = "Stori_CurrentNode";
-		private readonly ILogger<HomeController> _logger;
-		private readonly ApplicationDbContext m_context;
 
-		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+		public HomeController(ApplicationDbContext context, ILogger<HomeController> logger) : base(context, logger)
 		{
-			_logger = logger;
-			m_context = context;
-			m_context.Database.EnsureCreated();
 		}
 
 		public IActionResult Index()
@@ -29,18 +26,71 @@ namespace Stori.Controllers
 			{
 				currentGuid = default;
 			}
-			var queryable = m_context.StoriNode.AsQueryable();
+			var queryable = DBContext.StoriNode.AsQueryable();
+
+			var requestedNode = queryable.SingleOrDefault(n => n.ID == currentGuid);
+			if(requestedNode == null) // maybe it got deleted?
+			{
+				currentGuid = default;
+				requestedNode = StoriApp.DefaultNode;
+			}
+			ViewData["controller"] = this;
 			ViewData["history"] = GetHistory(currentGuid).Reverse();
 			ViewData["next"] = queryable.Where(n => n != null && n.Parent == currentGuid).OrderByDescending(n => n.Votes);
 			var l = queryable.Where(n => n != null && n.Parent == currentGuid).ToList();
-			var requestedNode = queryable.SingleOrDefault(n => n.ID == currentGuid) ;
 			if(requestedNode != null)
 			{
-				requestedNode.Votes++;
-				m_context.StoriNode.Update(requestedNode);
-				m_context.SaveChanges();
+				if(TryVote(out var voteToken, requestedNode.Parent, currentGuid))
+				{
+					requestedNode.Votes++;
+					DBContext.StoriNode.Update(requestedNode);
+					DBContext.SaveChanges();
+				}
+				Response.Cookies.Append(VOTE_COOKIE_KEY, voteToken);
 			}
 			return View(requestedNode?? StoriApp.DefaultNode);
+		}
+
+		private bool TryVote(out string voteToken, Guid previousNodeGUID, Guid newNodeGUID)
+		{
+			var userGuid = User.GetUserGUID();
+			var token = DBContext.VoteToken.Find(userGuid);
+			if(token == null || // User doesn't have an active token
+				!Request.Cookies.TryGetValue(VOTE_COOKIE_KEY, out voteToken) || // Client hasn't sent a token
+				newNodeGUID == default)	// We're at the start of the story
+			{
+				// Create from scratch
+				if (token == null)
+				{
+					token = new VoteToken
+					{
+						UserID = userGuid,
+						Node = newNodeGUID,
+						Token = Guid.NewGuid().ToString()
+					};
+					DBContext.Add(token);
+				}
+				else
+				{
+					token.Node = newNodeGUID;
+					token.Token = Guid.NewGuid().ToString();
+					DBContext.Update(token);
+				}
+				voteToken = token.Token;
+				DBContext.SaveChanges();
+				return false;
+			}
+			if(token.Node != previousNodeGUID)
+			{
+				return false;
+			}
+			token.Token = Guid.NewGuid().ToString();
+			voteToken = token.Token;
+			token.Node = newNodeGUID;
+			DBContext.VoteToken.Update(token);
+			DBContext.SaveChanges();
+			Logger.LogInformation($"User {userGuid} voted for node {previousNodeGUID}");
+			return true;
 		}
 
 		private IEnumerable<StoriNode> GetHistory(Guid currentGuid)
@@ -50,7 +100,7 @@ namespace Stori.Controllers
 				yield return StoriApp.DefaultNode;
 				yield break;
 			}
-			var n = m_context.StoriNode.Find(currentGuid);
+			var n = DBContext.StoriNode.Find(currentGuid);
 			if (n == null)
 			{
 				yield break;

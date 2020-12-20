@@ -4,6 +4,7 @@
 	ViewData["Title"] = "Home Page";
 	IEnumerable<Stori.Data.StoriNode> history = ViewData["history"] as IEnumerable<Stori.Data.StoriNode>;
 	IEnumerable<Stori.Data.StoriNode> next = ViewData["next"] as IEnumerable<Stori.Data.StoriNode>;
+	Stori.Controllers.StoriCustomController controller = ViewData["controller"] as Stori.Controllers.StoriCustomController;
 }
 
 <script>
@@ -38,8 +39,13 @@
 						<div class="col">
 							<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
 						</div>
-						<div class="col-auto choice-votes">
-							<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+						<div class="col-auto">
+							<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
+								<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
+							</div>
+							<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
+								<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
+							</div>
 						</div>
 					</div>
 
@@ -71,9 +77,11 @@
 				@foreach (Stori.Data.StoriNode node in next)
 				{
 					<button onclick="OnChoiceSelect('@node.ID')" class="list-group-item d-flex justify-content-between align-items-center card-action">
-						@node.Action
-						<div class="col-auto choice-votes">
-							<div class="row"><i class="far fa-eye choice-votes-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span></div>
+						<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+						<div class="col-auto">
+							<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
+								<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
+							</div>
 						</div>
 					</button>
 				}

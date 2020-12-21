@@ -12,11 +12,12 @@
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				<label asp-for="Input.Email"></label>
+				<input asp-for="Input.Email" class="form-control" />
+				<span asp-validation-for="Input.Email" class="text-danger"></span>
+				<small class="form-text text-muted">We won't ever email you about anything other than to verify your email, and to reset your password if needed.</small>
+			</div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />

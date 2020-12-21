@@ -133,3 +133,11 @@ body {
 .navbar-padding {
 	height: 80px;
 }
+
+.modal-content {
+	background-color: #4d3f44;
+}
+
+.close {
+	color: white;
+}

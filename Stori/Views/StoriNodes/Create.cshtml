@@ -5,7 +5,40 @@
 	var parent = (Stori.Data.StoriNode)ViewData["parent"];
 }
 
-<h2>Create New Choice</h2>
+<div class="row">
+	<div class="col">
+		<h2>Create New Choice</h2>
+	</div>
+	<div class="col-auto">
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rulesfaqmodal">
+			Rules & FAQ
+		</button>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="rulesfaqmodal" tabindex="-1" role="dialog" aria-labelledby="rulesfaqmodalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Rules & FAQ</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<h3>Rules</h3>
+					<ol>
+						<li>No hate speech.</li>
+						<li>No contact information about any real individual or group. Write fiction.</li>
+						<li>No spam, no links.</li>
+						<li>Just be chill, ya know?</li>
+					</ol>
+					<h3>FAQ</h3>
+					<p>Got a question that isn't here? <a href="mailto:@(Stori.Startup.ContactEmail)">Email Me</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <hr />
 <div class="row">
 	<div class="col">
@@ -24,14 +57,14 @@
 				<label asp-for="Action" class="control-label"></label>
 				<textarea asp-for="Action" class="form-control"></textarea>
 				<span asp-validation-for="Action" class="text-danger"></span>
+				<small class="form-text text-muted">Describe the action that the player will undertake. Maximum 256 characters.</small>
 			</div>
 			<div class="form-group">
 				<label asp-for="Content" class="control-label"></label>
 				<textarea asp-for="Content" class="form-control" rows="6"></textarea>
 				<span asp-validation-for="Content" class="text-danger"></span>
-			</div>
-			<div class="alert alert-warning" role="alert">
-				Story choices cannot be edited once they're created, so make sure everything is correct!
+				<small class="form-text text-muted">What happens due to that action? Maximum 2048 characters.</small>
+				<small class="form-text text-muted">Story choices cannot be edited once they're created, so make sure everything is correct!</small>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="Create" class="btn btn-primary btn-block" />

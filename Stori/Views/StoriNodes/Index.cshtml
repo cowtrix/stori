@@ -9,43 +9,51 @@
 
 	@if (!Model.Any())
 	{
-		<div class="alert alert-dark card-prompt" role="alert">
-			You haven't written any story choices yet. Start from the beginning, and write your adventure!
-		</div>
-		<a href="~/" class="btn btn-primary btn-block" role="button" aria-disabled="true">Go To Story</a>
+	<div class="alert alert-dark card-prompt" role="alert">
+		You haven't written any story choices yet. Start from the beginning, and write your adventure!
+	</div>
+	<a href="~/" class="btn btn-primary btn-block" role="button" aria-disabled="true">Go To Story</a>
 	}
+	else
+	{
+	<div class="alert alert-dark card-prompt" role="alert">
+		<p>Here you can find the story choices you've written so far, and see how popular they are!</p>
+		<p>Total Views: @Model.Sum(n => n.Votes)</p>
+	</div>
+	}
+
 
 	@for (var i = 0; i < Model.Count(); ++i)
 	{
 		var node = Model.ElementAt(i);
-		<div class="card card-action">
-			<div class="card-body row">
-				<div class="col">
-					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+	<div class="card card-action">
+		<div class="card-body row">
+			<div class="col">
+				<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+			</div>
+			<div class="col-auto">
+				<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
+					<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
 				</div>
-				<div class="col-auto">
-					<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
-						<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
-					</div>
-					<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
-						<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
-					</div>
+				<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
+					<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
 				</div>
 			</div>
 		</div>
-		<div class="card">
-			<div class="card-body row">
-				<div class="col">
-					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
-				</div>
+	</div>
+	<div class="card">
+		<div class="card-body row">
+			<div class="col">
+				<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
 			</div>
 		</div>
+	</div>
 
 		if (i < Model.Count() - 1)
 		{
-			<div class="card-seperator text-center">
-				<i class="fas fa-ellipsis-v"></i>
-			</div>
+	<div class="card-seperator text-center">
+		<i class="fas fa-ellipsis-v"></i>
+	</div>
 		}
 	}
 </div>

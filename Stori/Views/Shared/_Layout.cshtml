@@ -12,7 +12,7 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar sticky-top navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+		<nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
 			<div class="container">
 				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Stori</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -23,12 +23,16 @@
 					<partial name="_LoginPartial" />
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
+							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="About">About</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
+		<div class="navbar-padding"></div>
 	</header>
 	<div class="container dark-skin">
 		<main role="main" class="pb-3">

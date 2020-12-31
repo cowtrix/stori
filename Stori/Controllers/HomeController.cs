@@ -16,6 +16,8 @@ namespace Stori.Controllers
 		public const string VOTE_COOKIE_KEY = "Stori_VoteToken";
 		public const string NODE_COOKIE_KEY = "Stori_CurrentNode";
 
+		private static HashSet<string> m_anonymousTokens = new HashSet<string>();
+
 		public HomeController(ApplicationDbContext context, ILogger<HomeController> logger) : base(context, logger)
 		{
 		}
@@ -53,11 +55,39 @@ namespace Stori.Controllers
 
 		private bool TryVote(out string voteToken, Guid previousNodeGUID, Guid newNodeGUID)
 		{
+			if(User.Identity.IsAuthenticated)
+			{
+				return TryVoteAuthenticated(out voteToken, previousNodeGUID, newNodeGUID);
+			}
+			else
+			{
+				return TryVoteAnonymous(out voteToken, previousNodeGUID, newNodeGUID);
+			}
+		}
+
+		private bool TryVoteAnonymous(out string voteToken, Guid previousNodeGUID, Guid newNodeGUID)
+		{
+			bool result = false;
+			if(newNodeGUID != default &&
+				Request.Cookies.TryGetValue(VOTE_COOKIE_KEY, out voteToken) && 
+				m_anonymousTokens.Contains(voteToken))
+			{
+				var tokenGUID = Guid.Parse(voteToken.Substring(0, default(Guid).ToString().Length));
+				result = tokenGUID == previousNodeGUID;
+			}
+			// Set up a new token
+			voteToken = newNodeGUID.ToString() + '|' + Guid.NewGuid().ToString();
+			m_anonymousTokens.Add(voteToken);
+			return result;
+		}
+
+		private bool TryVoteAuthenticated(out string voteToken, Guid previousNodeGUID, Guid newNodeGUID)
+		{
 			var userGuid = User.GetUserGUID();
 			var token = DBContext.VoteToken.Find(userGuid);
-			if(token == null || // User doesn't have an active token
+			if (token == null || // User doesn't have an active token
 				!Request.Cookies.TryGetValue(VOTE_COOKIE_KEY, out voteToken) || // Client hasn't sent a token
-				newNodeGUID == default)	// We're at the start of the story
+				newNodeGUID == default) // We're at the start of the story
 			{
 				// Create from scratch
 				if (token == null)
@@ -80,7 +110,7 @@ namespace Stori.Controllers
 				DBContext.SaveChanges();
 				return false;
 			}
-			if(token.Node != previousNodeGUID)
+			if (token.Node != previousNodeGUID)
 			{
 				return false;
 			}

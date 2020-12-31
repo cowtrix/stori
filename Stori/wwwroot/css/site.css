@@ -66,8 +66,6 @@ html {
 }
 
 body {
-	/* Margin bottom by footer height */
-	margin-bottom: 60px;
 	background-color: #251e20;
 }
 
@@ -140,4 +138,18 @@ body {
 
 .close {
 	color: white;
+}
+
+.list-header {
+	margin: 10px;
+}
+
+.list-header-text {
+	margin: auto;
+	margin-right: 10px;
+}
+
+.choice-action-text {
+	margin-top:auto;
+	margin-bottom:auto;
 }

@@ -20,8 +20,6 @@ namespace Stori
 {
 	public class Startup
 	{
-		public static string ContactEmail => Configuration.GetValue<string>("ContactEmail");
-
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;

@@ -5,6 +5,8 @@
 	IEnumerable<Stori.Data.StoriNode> history = ViewData["history"] as IEnumerable<Stori.Data.StoriNode>;
 	IEnumerable<Stori.Data.StoriNode> next = ViewData["next"] as IEnumerable<Stori.Data.StoriNode>;
 	Stori.Controllers.StoriCustomController controller = ViewData["controller"] as Stori.Controllers.StoriCustomController;
+	const string contentclass = "choice-content-text";
+	const string actionclass = "choice-action-text";
 }
 
 <script>
@@ -31,13 +33,13 @@
 	@{
 		for (var i = 0; i < history.Count(); ++i)
 		{
-			var node = history.ElementAt(i);
+			Stori.Data.StoriNode node = history.ElementAt(i);
 			if (!string.IsNullOrEmpty(node.Action))
 			{
 				<div class="card card-action">
 					<div class="card-body row">
 						<div class="col">
-							<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+							@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action, actionclass))
 						</div>
 						<div class="col-auto">
 							<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
@@ -53,7 +55,7 @@
 			}
 			<div class="card">
 				<div class="card-body">
-					<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
+					@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content, contentclass))
 				</div>
 			</div>
 			<div class="card-seperator text-center">
@@ -77,7 +79,7 @@
 				@foreach (Stori.Data.StoriNode node in next)
 				{
 					<button onclick="OnChoiceSelect('@node.ID')" class="list-group-item d-flex justify-content-between align-items-center card-action">
-						<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
+						@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action, actionclass))
 						<div class="col-auto">
 							<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
 								<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>

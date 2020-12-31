@@ -3,57 +3,82 @@
 @{
 	ViewData["Title"] = "Your Stories";
 	Stori.Controllers.StoriCustomController controller = ViewData["controller"] as Stori.Controllers.StoriCustomController;
+	Stori.Controllers.StoriNodesController.eSortMode sortmode = (Stori.Controllers.StoriNodesController.eSortMode)ViewData["sortmode"];
+	IEnumerable<Stori.Data.StoriNode> sorted = Model;
+	switch (sortmode)
+	{
+		case Stori.Controllers.StoriNodesController.eSortMode.Date:
+			sorted = sorted.OrderByDescending(n => n.CreationDate);
+			break;
+		case Stori.Controllers.StoriNodesController.eSortMode.Votes:
+			sorted = sorted.OrderByDescending(n => n.Votes);
+			break;
+	}
+	int counter = 0;
+	int totalCount = sorted.Count();
+	const string contentclass = "choice-content-text";
+	const string actionclass = "choice-action-text";
 }
 
 <div class="col">
 
 	@if (!Model.Any())
 	{
-	<div class="alert alert-dark card-prompt" role="alert">
-		You haven't written any story choices yet. Start from the beginning, and write your adventure!
-	</div>
-	<a href="~/" class="btn btn-primary btn-block" role="button" aria-disabled="true">Go To Story</a>
+		<div class="alert alert-dark card-prompt" role="alert">
+			You haven't written any story choices yet. Start from the beginning, and write your adventure!
+		</div>
+		<a href="~/" class="btn btn-primary btn-block" role="button" aria-disabled="true">Go To Story</a>
 	}
 	else
 	{
-	<div class="alert alert-dark card-prompt" role="alert">
-		<p>Here you can find the story choices you've written so far, and see how popular they are!</p>
-		<p>Total Views: @Model.Sum(n => n.Votes)</p>
-	</div>
+		<div class="alert alert-dark card-prompt" role="alert">
+			<p>Here you can find the story choices you've written so far, and see how popular they are!</p>
+			<p>Total Views: @Model.Sum(n => n.Votes)</p>
+		</div>
+		<div class="row list-header">
+			<p class="list-header-text">Order By</p>
+			<div class="dropdown">
+				<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fas fa-sort-amount-down-alt"></i>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					<a class="dropdown-item @(sortmode==Stori.Controllers.StoriNodesController.eSortMode.Date ? "active" : "")" href="?sortmode=date">By Date</a>
+					<a class="dropdown-item @(sortmode==Stori.Controllers.StoriNodesController.eSortMode.Votes ? "active" : "")" href="?sortmode=votes">By Votes</a>
+				</div>
+			</div>
+		</div>
 	}
-
-
-	@for (var i = 0; i < Model.Count(); ++i)
+	@foreach (var node in sorted)
 	{
-		var node = Model.ElementAt(i);
-	<div class="card card-action">
-		<div class="card-body row">
-			<div class="col">
-				<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action))</p>
-			</div>
-			<div class="col-auto">
-				<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
-					<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
+		<div class="card card-action">
+			<div class="card-body row">
+				<div class="col">
+					@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Action, actionclass))
 				</div>
-				<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
-					<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
+				<div class="col-auto">
+					<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
+						<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@node.Votes</span>
+					</div>
+					<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
+						<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="card">
-		<div class="card-body row">
-			<div class="col">
-				<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content))</p>
+		<div class="card">
+			<div class="card-body row">
+				<div class="col">
+					@Html.Raw(Stori.Data.StoriNode.MDToHTML(node.Content, contentclass))
+				</div>
 			</div>
 		</div>
-	</div>
 
-		if (i < Model.Count() - 1)
+		if (counter < totalCount - 1)
 		{
-	<div class="card-seperator text-center">
-		<i class="fas fa-ellipsis-v"></i>
-	</div>
+			<div class="card-seperator text-center">
+				<i class="fas fa-ellipsis-v"></i>
+			</div>
 		}
+		counter++;
 	}
 </div>

@@ -3,6 +3,7 @@
 @{
 	ViewData["Title"] = "Create New Choice";
 	var parent = (Stori.Data.StoriNode)ViewData["parent"];
+	const string pclass = "choice-content-text";
 }
 
 <div class="row">
@@ -25,15 +26,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<h3>Rules</h3>
-					<ol>
-						<li>No hate speech.</li>
-						<li>No contact information about any real individual or group. Write fiction.</li>
-						<li>No spam, no links.</li>
-						<li>Just be chill, ya know?</li>
-					</ol>
-					<h3>FAQ</h3>
-					<p>Got a question that isn't here? <a href="mailto:@(Stori.Startup.ContactEmail)">Email Me</a></p>
+					<partial name="../Shared/FAQPartial.cshtml" />
 				</div>
 			</div>
 		</div>
@@ -44,7 +37,7 @@
 	<div class="col">
 		<div class="card">
 			<div class="card-body">
-				<p>@Html.Raw(Stori.Data.StoriNode.MDToHTML(parent.Content))</p>
+				@Html.Raw(Stori.Data.StoriNode.MDToHTML(parent.Content, pclass))
 			</div>
 		</div>
 		<div class="card-seperator text-center">
@@ -66,6 +59,14 @@
 				<small class="form-text text-muted">What happens due to that action? Maximum 2048 characters.</small>
 				<small class="form-text text-muted">Story choices cannot be edited once they're created, so make sure everything is correct!</small>
 			</div>
+			@{
+				if (!User.Identity.IsAuthenticated)
+				{
+					<div class="alert alert-warning" role="alert">
+						You're currently not signed in. Sign up for an account and you'll be able to track all your submissions!
+					</div>
+				}
+			}
 			<div class="form-group">
 				<input type="submit" value="Create" class="btn btn-primary btn-block" />
 			</div>

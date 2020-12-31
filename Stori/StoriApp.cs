@@ -14,6 +14,8 @@ namespace Stori
 {
 	public class StoriApp
 	{
+		public static string ContactEmail => Startup.Configuration.GetValue<string>("ContactEmail");
+
 		public static StoriNode DefaultNode => new StoriNode
 		{
 			ID = default,
@@ -32,7 +34,7 @@ namespace Stori
 				{
 					webBuilder.UseStartup<Startup>();
 #if !DEBUG
-					webBuilder.UseUrls($"http://*:8081", $"http://*:8080");
+					webBuilder.UseUrls($"http://*:{Environment.GetEnvironmentVariable("PORT")}");
 #endif
 				});
 	}

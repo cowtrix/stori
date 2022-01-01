@@ -90,7 +90,7 @@ namespace Stori.Controllers
 		// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost("create")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind(nameof(StoriNode.Action), nameof(StoriNode.Content), nameof(StoriNode.Parent), nameof(StoriNode.Stub))] StoriNode storiNode
+		public async Task<IActionResult> Create([Bind(nameof(StoriNode.Action), nameof(StoriNode.Content), nameof(StoriNode.Parent), nameof(StoriNode.Stub))] StoriNode storiNode)
 		{
 			if (ModelState.IsValid)
 			{

@@ -38,6 +38,7 @@ namespace Stori.Data
 		[Required]
 		public string Content { get; set; }
 		public uint Votes { get; set; }
+		public bool Stub { get; set; }
 
 		public static string MDToHTML(string str, string pclass)
 		{

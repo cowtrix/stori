@@ -59,6 +59,12 @@
 				<small class="form-text text-muted">What happens due to that action? Maximum 2048 characters.</small>
 				<small class="form-text text-muted">Story choices cannot be edited once they're created, so make sure everything is correct!</small>
 			</div>
+			<div class="form-check">
+			  <input asp-for="Stub" class="form-check-input"></input>
+				<label asp-for="Stub" class="form-check-label"></label>
+				<span asp-validation-for="Stub" class="text-danger"></span>
+				<small class="form-text text-muted">Mark this choice as a Stub, where the story ends. Further choices will not be able to be added.</small>
+			</div>
 			@{
 				if (!User.Identity.IsAuthenticated)
 				{

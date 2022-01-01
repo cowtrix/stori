@@ -73,6 +73,10 @@ namespace Stori.Controllers
 				return BadRequest($"Couldn't find parent with ID {parent.Value}");
 			}
 			parentNode = parentNode ?? StoriApp.DefaultNode;
+			if(parentNode.Stub)
+			{
+			  return BadRequest($"Node with ID {parentNode.ID} is a stub and cannot have sub-stories.");
+			}
 			ViewData["parent"] = parentNode;
 			var newNode = new StoriNode
 			{
@@ -86,7 +90,7 @@ namespace Stori.Controllers
 		// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost("create")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind(nameof(StoriNode.Action), nameof(StoriNode.Content), nameof(StoriNode.Parent))] StoriNode storiNode)
+		public async Task<IActionResult> Create([Bind(nameof(StoriNode.Action), nameof(StoriNode.Content), nameof(StoriNode.Parent), nameof(StoriNode.Stub))] StoriNode storiNode
 		{
 			if (ModelState.IsValid)
 			{

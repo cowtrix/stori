@@ -87,9 +87,14 @@
 						</div>
 					</button>
 				}
-				<a href="@Stori.Controllers.StoriNodesController.ROUTE/create?parent=@Model.ID" class="btn btn-choice btn-block">
-					Create New Choice <i class="fas fa-plus-square"></i>
-				</a>
+				@{
+				  if (!Model.Stub)
+				  {
+				    <a href="@Stori.Controllers.StoriNodesController.ROUTE/create?parent=@Model.ID" class="btn btn-choice btn-block">
+					      Create New Choice <i class="fas fa-plus-square"></i>
+				    </a>
+				  }
+				}
 				@{
 					if (Model.ID != default)
 					{

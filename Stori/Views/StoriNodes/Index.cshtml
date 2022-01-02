@@ -62,6 +62,11 @@
 					<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
 						<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(node.ID)</span>
 					</div>
+					<div class="row">
+					  <a href="~/r/delete?id=@node.ID">
+						  <i class="fa fa-trash padded-icon"></i>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

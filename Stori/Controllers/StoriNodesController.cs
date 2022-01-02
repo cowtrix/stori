@@ -115,6 +115,46 @@ namespace Stori.Controllers
 			}
 			return View(storiNode);
 		}
+		
+			[HttpGet("delete")]
+		public IActionResult Delete([FromQuery] Guid? id)
+		{
+			if (id == null)
+			{
+				return BadRequest("ID cannot be null");
+			}
+			var node = DBContext.StoriNode.Find(id.Value);
+			if (node == null)
+			{
+				return BadRequest($"Couldn't find node with ID {parent.Value}");
+			}
+			if (!User.Identity.IsAuthenticated)
+	  	{
+			  return Unauthorized("Anonymous users cannot delete nodes.");
+			}
+			var userID = Guid.Parse(User.Claims.First().Value);
+			if(node.Creator == default || node.Creator != userID)
+			{
+			  return Unauthorized("Not permitted to delete node, not the creator.");
+			}
+			return View(node);
+		}
+
+		// DELETE: StoriNodes/Delete
+		// To protect from overposting attacks, enable the specific properties you want to bind to, for 
+		// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost("delete")]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete([FromForm] Guid? id)
+		{
+			if (ModelState.IsValid)
+			{
+				DBContext.Remove(DBContext.StoriNode.Find(id.Value));
+				await DBContext.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+			return View(id);
+		}
 
 		private static string NodeToHTML(StoriNode node)
 		{

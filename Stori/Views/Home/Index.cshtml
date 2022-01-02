@@ -67,7 +67,7 @@
 	<div class="card">
 		<div class="card-body">
 			@{
-				if (!next.Any())
+				if (!Model.Stub && !next.Any())
 				{
 					<div class="alert alert-dark card-prompt" role="alert">
 						You've reached the end of the story so far. What happens next?

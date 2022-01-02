@@ -41,14 +41,6 @@
 				<div class="col">
 					@Html.Raw(Stori.Data.StoriNode.MDToHTML(Model.Action, actionclass))
 				</div>
-				<div class="col-auto">
-					<div class="row choice-votes" data-toggle="tooltip" data-placement="bottom" title="Views">
-						<i class="fa fa-eye padded-icon"></i><span class="badge badge-primary badge-pill">@Model.Votes</span>
-					</div>
-					<div class="row" data-toggle="tooltip" data-placement="bottom" title="Sub-Stories">
-						<i class="fa fa-bookmark padded-icon"></i><span class="badge badge-primary badge-pill">@controller.GetSubDocumentCount(Model.ID)</span>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="card">

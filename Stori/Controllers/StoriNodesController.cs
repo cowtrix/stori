@@ -145,7 +145,7 @@ namespace Stori.Controllers
 		// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost("delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete([FromForm] Guid? id)
+		public async Task<IActionResult> ConfirmDelete([FromForm] Guid? id)
 		{
 			if (ModelState.IsValid)
 			{

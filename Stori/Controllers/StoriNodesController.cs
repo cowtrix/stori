@@ -126,7 +126,7 @@ namespace Stori.Controllers
 			var node = DBContext.StoriNode.Find(id.Value);
 			if (node == null)
 			{
-				return BadRequest($"Couldn't find node with ID {parent.Value}");
+				return BadRequest($"Couldn't find node with ID {node.Value}");
 			}
 			if (!User.Identity.IsAuthenticated)
 	  	{

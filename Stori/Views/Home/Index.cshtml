@@ -13,7 +13,7 @@
 	function OnChoiceSelect(choice)
 	{
 		console.log(choice)
-		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=; Max-Age=9999999999" + choice;
+		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=" + choice + "; Max-Age=9999999999"
 		window.location.reload(false)
 	}
 

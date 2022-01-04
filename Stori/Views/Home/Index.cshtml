@@ -13,13 +13,13 @@
 	function OnChoiceSelect(choice)
 	{
 		console.log(choice)
-		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=" + choice;
+		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=; Max-Age=9999999999" + choice;
 		window.location.reload(false)
 	}
 
 	function BeginAgain()
 	{
-		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=; Max-Age=-99999999;";
+		document.cookie = "@(Stori.Controllers.HomeController.NODE_COOKIE_KEY)=; Max-Age=-1;";
 		window.location.reload(false)
 	}
 
